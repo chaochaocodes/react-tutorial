@@ -2,26 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-    state = {
-        value: null
-    }
-
-    render() {
+function Square(props) {
         return(
             <button 
                 className="square" 
-                onClick={()=> this.setState({value: 'X'})}
+                // Since the Board passed onClick={() => this.handleClick(i)} to Square, 
+                // the Square calls this.handleClick(i) when clicked.
+                onClick={()=> props.onClick()}
                 >
-                {this.state.value}
+                {props.value}
             </button>
         );
-    }
 }
 
 class Board extends React.Component {
+    state = {
+        // Array of 9 nulls corresponding to 9 squares
+        squares: Array(9).fill(null)
+    }
+
+    handleClick(i) {
+        // create a copy of the squares array to modify instead of modifying the existing array
+        // why? immutability! 
+        // 1. Avoiding direct data mutation lets us Cmd-Z, Cmd-Y (keep previous versions to reuse!)
+        // 2. Helps you build pure components for optimizing performance
+        // Immutable data can easily determine if changes have been made, to determine when a component requires re-rendering.
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({squares: squares})
+    }
+
     renderSquare(i) {
-        return <Square value={i} />;
+        return (
+            <Square 
+            // maintains which squares are filled
+            value={this.state.squares[i]} 
+            onClick={() => this.handleClick(i)}
+        />);
     }
     
     render() {
