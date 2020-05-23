@@ -18,7 +18,8 @@ function Square(props) {
 class Board extends React.Component {
     state = {
         // Array of 9 nulls corresponding to 9 squares
-        squares: Array(9).fill(null)
+        squares: Array(9).fill(null),
+        xIsNext: true,
     }
 
     handleClick(i) {
@@ -28,8 +29,11 @@ class Board extends React.Component {
         // 2. Helps you build pure components for optimizing performance
         // Immutable data can easily determine if changes have been made, to determine when a component requires re-rendering.
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({squares: squares})
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        })
     }
 
     renderSquare(i) {
@@ -42,7 +46,7 @@ class Board extends React.Component {
     }
     
     render() {
-        const status = 'Next player: X';
+        const status = 'Next player:' + (this.state.xIsNext ? 'X' : 'O');
         return(
             <>
                 <div className="status">{status}</div>
