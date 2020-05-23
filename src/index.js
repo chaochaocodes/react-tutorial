@@ -8,7 +8,7 @@ function Square(props) {
                 className="square" 
                 // Since the Board passed onClick={() => this.handleClick(i)} to Square, 
                 // the Square calls this.handleClick(i) when clicked.
-                onClick={()=> props.onClick()}
+                onClick={props.onClick}
                 >
                 {props.value}
             </button>
